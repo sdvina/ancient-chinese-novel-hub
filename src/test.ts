@@ -1,5 +1,5 @@
-import * as constant from "./constant.js"
-import * as helper from "./helper.js";
+import * as constant from "./constant.ts"
+import * as helper from "./helper.ts";
 
 
 function test(){

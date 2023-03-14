@@ -1,21 +1,32 @@
-import { emptyDirSync, ensureFileSync } from "https://deno.land/std@0.179.0/fs/mod.ts"
+import {
+    emptyDirSync,
+    ensureDirSync,
+    ensureFileSync,
+    existsSync
+} from "https://deno.land/std@0.179.0/fs/mod.ts"
+import {
+    StringReader,
+    StringWriter
+} from "https://deno.land/std@0.179.0/io/mod.ts"
 import * as path from "path"
 import MarkdownIt from "markdown-it"
-import {die} from "https://esm.sh/v111/entities@3.0.1/deno/lib/maps/entities.json.js";
 
-export const dir = (baseDir:string, dir: string) => {
+export const makeDir = (baseDir:string, dir: string, reserve: boolean) => {
     const dirPath = path.resolve(baseDir, dir)
-    emptyDirSync(dirPath)
+    if(reserve) ensureDirSync(dirPath)
+    else emptyDirSync(dirPath)
 }
 
-export const secureWriteFile = (baseDir: string, filePath: string, data: string): Promise<string> => {
+
+
+export const secureWriteFile = (baseDir: string, filePath: string, data: Uint8Array): Promise<string> => {
 
     return new Promise((resolve) => {
         const filePathResolved = path.resolve(baseDir, filePath)
-        if (!fs.existsSync(filePathResolved)) {
-            const dirPath = path.dirname(filePathResolved)
-            fs.mkdirSync(dirPath, { recursive: true })
-            fs.writeFileSync(filePathResolved, data)
+        if (!existsSync(filePathResolved)) {
+            const dirName = path.dirname(filePathResolved)
+            ensureFileSync(dirName)
+            Deno.writeFileSync(filePathResolved, data)
             resolve("创建文件成功")
         } else {
             resolve("文件已存在")
@@ -43,11 +54,11 @@ export const secureCopyFile = (baseSrcDir:string, baseDestDir:string, srcFile: s
         const srcPath = path.resolve(baseSrcDir, srcFile)
         const destPath = path.resolve(baseDestDir, destFile)
 
-        if (!fs.existsSync(srcPath)) {
+        if (!existsSync(srcPath)) {
             reject("Source file (${srcFile}) does not exist")
         }
 
-        if (fs.existsSync(destPath)) {
+        if (existsSync(destPath)) {
             reject("Destination file (${destFile}) already exists")
         }
 
