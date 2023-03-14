@@ -1,0 +1,1 @@
+export type GetSpecifyData = (html: string) => Promise<any>
