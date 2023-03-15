@@ -1,6 +1,7 @@
 import axios from "redaxios"
 import superagent from "superagent"
-import { GetSpecifyData} from "./interface.ts"
+import {GetSpecifyData} from "./interface.ts"
+import {Any} from "encoding"
 
 export default class Spider {
 
@@ -19,7 +20,7 @@ export default class Spider {
     }
 
     // 获取
-    getHtmlContent = async (url: string, getSpecifyData: GetSpecifyData): Promise<string> => {
+    getHtmlContent = async (url: string, getSpecifyData: GetSpecifyData): Promise<Array<Any>> => {
         // 1. 获取页面 html 信息
         const html = await this.getHtmlByAxios(url)
         // 2. 获取对应标签内容信息（可以适当处理输入内容格式）

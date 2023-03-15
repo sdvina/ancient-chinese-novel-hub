@@ -1,8 +1,4 @@
-import {
-    copy,
-    emptyDirSync,
-    ensureDirSync
-} from "fs"
+import {copy, emptyDirSync, ensureDirSync} from "fs"
 import * as path from "path"
 import MarkdownIt from "markdown-it"
 
@@ -65,13 +61,12 @@ export const copyDir = async (
     baseSrcDir: string,
     baseDestDir: string,
     srcDir: string,
-    destDir: string,
-    recursive: boolean = false
+    destDir: string
 ) => {
 
     const srcPath = path.resolve(baseSrcDir, srcDir)
     const destPath = path.resolve(baseDestDir, destDir)
-    await copy(srcPath, destPath, {recursive: recursive});
+    await copy(srcPath, destPath)
 }
 
 interface Novel {
@@ -102,7 +97,7 @@ export const readNovelJsonFile = async (
 
     return new Promise<Array<NovelCategory>>((resolve)=> {
         readTextFile(baseDir, filePath).then( jsonString =>
-            resolve(JSON.parse(jsonString) as Array<NovelCategory>)
+            resolve(JSON.parse(jsonString.toString()) as Array<NovelCategory>)
         )
     })
 }

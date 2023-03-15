@@ -16,10 +16,10 @@ const getCatalog = (html: string): Promise<Array<CatalogItem>> => {
     return new Promise((resolve, reject) => {
         const catalogEl = $("div.mw-parser-output > ul > li > a")
         if (catalogEl) {
-            let catalog = new Array<CatalogItem>()
+            const catalog = new Array<CatalogItem>()
             catalogEl.each((i, a) => {
                 catalog.push({
-                    no: i,
+                    no: i.toString(),
                     title: $(a).text(),
                     url: constant.WIKISOURCE_URL + $(a).attr('href')
                 })
@@ -37,10 +37,10 @@ export const getSection = (html: string): Promise<Array<SectionItem>> => {
     return new Promise((resolve, reject) => {
         const sectionEl = $("div.mw-parser-output > p")
         if (sectionEl) {
-            let section = new Array<SectionItem>()
+            const section = new Array<SectionItem>()
             sectionEl.each((i, p) => {
                 section.push({
-                    no: i,
+                    no: i.toString(),
                     content: $(p).text()
                 })
             })
@@ -58,11 +58,11 @@ const run = (fileName: string) => {
 
                 spider.getHtmlContent(novel.url, getCatalog).then(catalog => {
                     console.log(catalog)
-                    catalog.forEach( catalogItem => {
+                    catalog.forEach(catalogItem => {
                         /*spider.getHtmlContent(catalogItem.url, getSection).then( section => {
                             console.log(section)
                         })*/
-                        let section = await spider.getHtmlContent(catalogItem.url, getSection)
+                        let section = spider.getHtmlContent(catalogItem.url, getSection)
                     })
                 })
             })
