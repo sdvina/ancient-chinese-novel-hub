@@ -1,83 +1,78 @@
 import {
+    copy,
     emptyDirSync,
-    ensureDirSync,
-    ensureFileSync,
-    existsSync
-} from "https://deno.land/std@0.179.0/fs/mod.ts"
-import {
-    StringReader,
-    StringWriter
-} from "https://deno.land/std@0.179.0/io/mod.ts"
+    ensureDirSync
+} from "fs"
 import * as path from "path"
 import MarkdownIt from "markdown-it"
 
-export const makeDir = (baseDir:string, dir: string, reserve: boolean) => {
+export const makeDir = (baseDir:string, dir: string, reserve: boolean = false) => {
+
     const dirPath = path.resolve(baseDir, dir)
-    if(reserve) ensureDirSync(dirPath)
-    else emptyDirSync(dirPath)
+    reserve ? ensureDirSync(dirPath) : emptyDirSync(dirPath)
 }
 
+export const writeFile = async (baseDir: string, filePath: string, data: string) => {
 
-
-export const secureWriteFile = (baseDir: string, filePath: string, data: Uint8Array): Promise<string> => {
-
-    return new Promise((resolve) => {
-        const filePathResolved = path.resolve(baseDir, filePath)
-        if (!existsSync(filePathResolved)) {
-            const dirName = path.dirname(filePathResolved)
-            ensureFileSync(dirName)
-            Deno.writeFileSync(filePathResolved, data)
-            resolve("创建文件成功")
-        } else {
-            resolve("文件已存在")
-        }
-    })
+    const filePathResolved = path.resolve(baseDir, filePath)
+    const encoder = new TextEncoder();
+    const encodedData = encoder.encode(data);
+    try {
+        await Deno.writeFile(filePathResolved, encodedData)
+        console.log("Data written to file successfully.");
+    } catch (error) {
+        console.error("Error writing data to file:", error.message);
+    }
 }
 
-export const secureReadFile = (baseDir: string, filePath: string): Promise<string> => {
+export const writeTextFile = async (baseDir: string, filePath: string, data: string) => {
 
-    return new Promise((resolve, reject) => {
-        const filePathResolved = path.resolve(baseDir, filePath)
-        fs.readFile(filePathResolved, "utf8", (err, data) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(data.toString())
-            }
-        });
-    });
+    const filePathResolved = path.resolve(baseDir, filePath)
+    try {
+        await Deno.writeTextFile(filePathResolved, data)
+        console.log("Data written to file successfully.");
+    } catch (error) {
+        console.error("Error writing data to file:", error.message);
+    }
 }
 
-export const secureCopyFile = (baseSrcDir:string, baseDestDir:string, srcFile: string, destFile: string): Promise<string> => {
+export const readFile = (baseDir: string, filePath: string): Promise<Uint8Array> => {
 
-    return new Promise((resolve, reject) => {
+    const filePathResolved = path.resolve(baseDir, filePath)
+    return Deno.readFile(filePathResolved)
+}
+
+export const readTextFile = (baseDir: string, filePath: string): Promise<String> => {
+
+    const filePathResolved = path.resolve(baseDir, filePath)
+    return Deno.readTextFile(filePathResolved)
+}
+
+export const copyFile = async (
+    baseSrcDir: string,
+    baseDestDir: string,
+    srcFile: string,
+    destFile: string,
+    reserve: boolean = false
+) => {
+
         const srcPath = path.resolve(baseSrcDir, srcFile)
         const destPath = path.resolve(baseDestDir, destFile)
-
-        if (!existsSync(srcPath)) {
-            reject("Source file (${srcFile}) does not exist")
-        }
-
-        if (existsSync(destPath)) {
-            reject("Destination file (${destFile}) already exists")
-        }
-
-        const srcStream = fs.createReadStream(srcPath)
-        const destStream = fs.createWriteStream(destPath)
-
-        srcStream.pipe(destStream);
-
-        srcStream.on("error", (err) => {
-            reject(err);
-        });
-
-        destStream.on("finish", () => {
-            resolve("File copied successfully from ${srcFile} to ${destFile}")
-        });
-    });
+        await copy(srcPath, destPath, {overwrite: reserve});
 }
 
+export const copyDir = async (
+    baseSrcDir: string,
+    baseDestDir: string,
+    srcDir: string,
+    destDir: string,
+    recursive: boolean = false
+) => {
 
+    const srcPath = path.resolve(baseSrcDir, srcDir)
+    const destPath = path.resolve(baseDestDir, destDir)
+    await copy(srcPath, destPath, {recursive: recursive});
+}
 
 interface Novel {
     name: string
@@ -85,28 +80,31 @@ interface Novel {
     dynasty: string
     md5: string | null
     url: string
+    category?: {
+        name: string
+        url: string
+    }
+    chapter?: {
+        name: string
+        sections: Array<string>
+    }
 }
 
 interface NovelCategory {
-    name: string;
+    name: string
     novels: Array<Novel>
 }
 
-export const readNovelJsonFile = (baseDir: string, filePath: string): Array<NovelCategory> | null => {
+export const readNovelJsonFile = async (
+    baseDir: string,
+    filePath: string
+): Promise<Array<NovelCategory>> => {
 
-    let categoryArray = null
-    try {
-        const data = secureReadFile(baseDir, filePath)
-        //const data = fs.readFileSync(filePath, 'utf8')
-        data.then((value) => {
-            categoryArray = JSON.parse(value) as Array<NovelCategory>
-        })
-        return categoryArray
-    } catch (err) {
-        console.error(err)
-
-        return categoryArray
-    }
+    return new Promise<Array<NovelCategory>>((resolve)=> {
+        readTextFile(baseDir, filePath).then( jsonString =>
+            resolve(JSON.parse(jsonString) as Array<NovelCategory>)
+        )
+    })
 }
 
 export const getMD = (): MarkdownIt => {

@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "redaxios"
 import superagent from "superagent"
 import { GetSpecifyData} from "./interface.ts"
 

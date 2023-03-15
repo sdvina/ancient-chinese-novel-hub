@@ -18,3 +18,5 @@ export const SCAFFOLD_INDEX = path.resolve(__dirname, PREV_DIR, "scaffold/index.
 export const SCAFFOLD_CATALOG = path.resolve(__dirname, PREV_DIR, "scaffold/catalog.html")
 
 export const SCAFFOLD_CHAPTER = path.resolve(__dirname, PREV_DIR, "scaffold/chapter.html")
+
+export const WIKISOURCE_URL = "https://zh.wikisource.org"
