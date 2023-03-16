@@ -5,8 +5,9 @@ import {
 } from "std/fs"
 import * as path from "path"
 import MarkdownIt from "markdown-it"
+import { NovelCategory } from "./interface.ts"
 
-export const makeDir = (baseDir:string, dir: string, reserve: boolean = false) => {
+export const makeDir = (baseDir:string, dir: string, reserve: boolean) => {
 
     const dirPath = path.resolve(baseDir, dir)
     reserve ? ensureDirSync(dirPath) : emptyDirSync(dirPath)
@@ -19,20 +20,20 @@ export const writeFile = async (baseDir: string, filePath: string, data: string)
     const encodedData = encoder.encode(data);
     try {
         await Deno.writeFile(filePathResolved, encodedData)
-        console.log("Data written to file successfully.");
+        console.log(`Data written to file ${filePath} successfully.`);
     } catch (error) {
-        console.error("Error writing data to file:", error.message);
+        console.error(`Error writing data to file ${filePath}:`, error.message);
     }
 }
 
-export const writeTextFile = async (baseDir: string, filePath: string, data: string) => {
+export const writeTextFile = async (baseDir: string, filePath: string, data: string, append?: boolean) => {
 
     const filePathResolved = path.resolve(baseDir, filePath)
     try {
-        await Deno.writeTextFile(filePathResolved, data)
-        console.log("Data written to file successfully.");
+        await Deno.writeTextFile(filePathResolved, data, { append: append })
+        console.log(`Data written to file ${filePath} successfully.`);
     } catch (error) {
-        console.error("Error writing data to file:", error.message);
+        console.error(`Error writing data to file ${filePath}:`, error.message);
     }
 }
 
@@ -42,10 +43,16 @@ export const readFile = (baseDir: string, filePath: string): Promise<Uint8Array>
     return Deno.readFile(filePathResolved)
 }
 
-export const readTextFile = (baseDir: string, filePath: string): Promise<String> => {
+export const readTextFile = (baseDir: string, filePath: string): Promise<string> => {
 
     const filePathResolved = path.resolve(baseDir, filePath)
     return Deno.readTextFile(filePathResolved)
+}
+
+export const deleteFile = (baseDir: string, filePath: string) => {
+
+    const filePathResolved = path.resolve(baseDir, filePath)
+    Deno.removeSync(filePathResolved)
 }
 
 export const copyFile = async (
@@ -53,7 +60,7 @@ export const copyFile = async (
     baseDestDir: string,
     srcFile: string,
     destFile: string,
-    reserve: boolean = false
+    reserve?: boolean
 ) => {
 
         const srcPath = path.resolve(baseSrcDir, srcFile)
@@ -73,28 +80,7 @@ export const copyDir = async (
     await copy(srcPath, destPath)
 }
 
-interface Novel {
-    name: string
-    author: string
-    dynasty: string
-    md5: string | null
-    url: string
-    category?: {
-        name: string
-        url: string
-    }
-    chapter?: {
-        name: string
-        sections: Array<string>
-    }
-}
-
-interface NovelCategory {
-    name: string
-    novels: Array<Novel>
-}
-
-export const readNovelJsonFile = async (
+export const readNovelJsonFile = (
     baseDir: string,
     filePath: string
 ): Promise<Array<NovelCategory>> => {
@@ -127,13 +113,6 @@ export const getMD = (): MarkdownIt => {
         // For example, you can use '«»„“' for Russian, '„“‚‘' for German,
         // and ['«\xA0', '\xA0»', '‹\xA0', '\xA0›'] for French (including nbsp).
         quotes: '“”‘’',
-
-        // Highlighter function. Should return escaped HTML,
-        // or '' if the source string is not changed and should be escaped externally.
-        // If result starts with <pre... internal wrapper is skipped.
-        highlight: function (/*str, lang*/) {
-            return ''
-        }
     })
     //md.use()
     console.log("create markdown-it: " + md)

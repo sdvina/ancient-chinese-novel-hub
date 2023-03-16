@@ -18,3 +18,9 @@ export const SCAFFOLD_CATALOG = path.resolve(__dirname, PREV_DIR, "scaffold/cata
 export const SCAFFOLD_CHAPTER = path.resolve(__dirname, PREV_DIR, "scaffold/chapter.html")
 
 export const WIKISOURCE_URL = "https://zh.wikisource.org"
+
+export const MD_SUFFIX = ".md"
+
+export const MD_TITLE_TOP = "# "
+
+export const MD_TITLE_SECONDARY = "## "

@@ -3,11 +3,23 @@
     "name": "志怪小說",
     "novels": [
       {
-        "name": "搜神记",
+        "name": "搜神記",
         "author": "干寶",
         "dynasty": "晉",
-        "md5": "",
-        "url": "https://zh.wikisource.org/wiki/%E6%90%9C%E7%A5%9E%E8%A8%98"
+        "url": "https://zh.wikisource.org/wiki/%E6%90%9C%E7%A5%9E%E8%A8%98",
+        "reserved": true
+      }
+    ]
+  },
+  {
+    "name": "歷史演義",
+    "novels": [
+      {
+        "name": "三國演義",
+        "author": "羅貫中",
+        "dynasty": "明",
+        "url": "https://zh.wikisource.org/wiki/%E4%B8%89%E5%9C%8B%E6%BC%94%E7%BE%A9",
+        "reserved": false
       }
     ]
   }

@@ -4,10 +4,10 @@ export interface Novel {
     name: string
     author: string
     dynasty: string
-    md5: string | null
     url: string
     catalog?: Array<CatalogItem>
     chapter?: Array<ChapterItem>
+    reserved: boolean
 }
 
 export interface CatalogItem {

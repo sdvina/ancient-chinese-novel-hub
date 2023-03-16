@@ -2,13 +2,14 @@ import * as constant from "./constant.ts"
 import * as helper from "./helper.ts"
 import * as cheerio from "cheerio"
 import Spider from "./spider.ts"
+import * as path from "path"
+import { EOL } from "std/fs"
 import {
-    Novel,
     CatalogItem,
     ChapterItem,
     SectionItem
 } from "./interface.ts"
-import { WIKISOURCE_URL } from "./constant.ts";
+
 const getCatalog = (html: string): Promise<Array<CatalogItem>> => {
 
     const $ = cheerio.load(html)
@@ -17,12 +18,17 @@ const getCatalog = (html: string): Promise<Array<CatalogItem>> => {
         const catalogEl = $("div.mw-parser-output > ul > li > a")
         if (catalogEl) {
             const catalog = new Array<CatalogItem>()
-            catalogEl.each((i, a) => {
-                catalog.push({
-                    no: i.toString(),
-                    title: $(a).text(),
-                    url: constant.WIKISOURCE_URL + $(a).attr('href')
-                })
+            let no = 1
+            catalogEl.each((_, a) => {
+                const title = $(a).text().trim()
+                if (title.length > 0) {
+                    catalog.push({
+                        no: no.toString(),
+                        title: title,
+                        url: constant.WIKISOURCE_URL + $(a).attr('href')
+                    })
+                    no ++
+                }
             })
             resolve(catalog)
         }
@@ -35,14 +41,21 @@ export const getSection = (html: string): Promise<Array<SectionItem>> => {
     const $ = cheerio.load(html)
 
     return new Promise((resolve, reject) => {
-        const sectionEl = $("div.mw-parser-output > p")
-        if (sectionEl) {
+        let sectionEl = $("div.mw-parser-output > p")
+        const sectionEl2 = $("div.prose > p")
+        if(sectionEl.length == 0) sectionEl = sectionEl2
+        if (sectionEl.length > 0) {
             const section = new Array<SectionItem>()
-            sectionEl.each((i, p) => {
-                section.push({
-                    no: i.toString(),
-                    content: $(p).text()
-                })
+            let no = 1
+            sectionEl.each((_, p) => {
+                const content = $(p).text().trim()
+                if (content.length > 0) {
+                    section.push({
+                        no: no.toString(),
+                        content: content
+                    })
+                    no ++
+                }
             })
             resolve(section)
         }
@@ -50,24 +63,35 @@ export const getSection = (html: string): Promise<Array<SectionItem>> => {
     })
 }
 
-const run = (fileName: string) => {
-    helper.readNovelJsonFile(constant.NOVEL_SRC_DIR, fileName).then(categoryArray => {
-        const spider = new Spider()
-        categoryArray.forEach(category => {
-            category.novels.forEach(novel => {
+const run = async (fileName: string) => {
 
-                spider.getHtmlContent(novel.url, getCatalog).then(catalog => {
-                    console.log(catalog)
-                    catalog.forEach(catalogItem => {
-                        /*spider.getHtmlContent(catalogItem.url, getSection).then( section => {
-                            console.log(section)
-                        })*/
-                        let section = spider.getHtmlContent(catalogItem.url, getSection)
-                    })
+    const spider = new Spider()
+    const categoryArray = await helper.readNovelJsonFile(constant.NOVEL_SRC_DIR, fileName)
+    categoryArray.forEach(category => {
+        // create category folder
+        helper.makeDir(constant.NOVEL_DIR, category.name, true)
+        const categoryDir = path.join(constant.NOVEL_DIR, category.name)
+        category.novels.filter(novel => novel.reserved == false).forEach(async novel => {
+            const catalog = await spider.getHtmlContent(novel.url, getCatalog)
+            const chapter = new Array<ChapterItem>()
+            const filePath = novel.name + constant.MD_SUFFIX
+            helper.deleteFile(categoryDir, filePath)
+            for (const catalogItem of catalog) {
+                const i = catalog.indexOf(catalogItem);
+                const section = await spider.getHtmlContent(catalogItem.url, getSection)
+                chapter.push({
+                    no: i.toString(),
+                    title: catalogItem.title,
+                    section: section
                 })
-            })
+                let chapterContent = constant.MD_TITLE_SECONDARY + catalogItem.title + EOL.LF + EOL.LF
+                section.forEach(sectionItem => {
+                    chapterContent = chapterContent + sectionItem.content + EOL.LF + EOL.LF
+                })
+                await helper.writeTextFile(categoryDir, filePath, chapterContent, true)
+            }
         })
     })
 }
 
-run("wikisource.json")
+await run("wikisource.json")
