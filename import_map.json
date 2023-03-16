@@ -3,10 +3,10 @@
     "lume/": "https://deno.land/x/lume@v1.15.3/",
     "markdown-it": "https://esm.sh/markdown-it@13.0.1",
     "superagent": "https://esm.sh/superagent@8.0.9",
-    "redaxios": "https://deno.land/x/redaxios/mod.ts",
+    "redaxios": "https://deno.land/x/redaxios@0.5.1/mod.ts",
     "axios": "https://esm.sh/axios@1.3.4",
     "cheerio": "https://esm.sh/cheerio@1.0.0-rc.12",
-    "fs": "https://deno.land/std@0.179.0/fs/mod.ts",
+    "std/fs": "https://deno.land/std@0.179.0/fs/mod.ts",
     "path": "https://deno.land/std@0.179.0/path/mod.ts",
     "dirname_deno": "https://x.nest.land/dirname_deno@0.3.0/mod.ts",
     "encoding": "https://deno.land/std@0.177.0/encoding/_yaml/utils.ts"

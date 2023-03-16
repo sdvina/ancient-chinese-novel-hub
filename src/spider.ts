@@ -1,7 +1,7 @@
 import axios from "redaxios"
 import superagent from "superagent"
-import {GetSpecifyData} from "./interface.ts"
-import {Any} from "encoding"
+import { GetSpecifyData } from "./interface.ts"
+import { Any } from "encoding"
 
 export default class Spider {
 

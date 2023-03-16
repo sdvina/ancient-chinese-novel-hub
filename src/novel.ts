@@ -8,7 +8,7 @@ import {
     ChapterItem,
     SectionItem
 } from "./interface.ts"
-import {WIKISOURCE_URL} from "./constant.ts";
+import { WIKISOURCE_URL } from "./constant.ts";
 const getCatalog = (html: string): Promise<Array<CatalogItem>> => {
 
     const $ = cheerio.load(html)

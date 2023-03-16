@@ -1,4 +1,8 @@
-import {copy, emptyDirSync, ensureDirSync} from "fs"
+import {
+    copy,
+    emptyDirSync,
+    ensureDirSync
+} from "std/fs"
 import * as path from "path"
 import MarkdownIt from "markdown-it"
 

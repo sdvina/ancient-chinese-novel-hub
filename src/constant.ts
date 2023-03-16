@@ -1,9 +1,7 @@
 import * as path from "path"
-import {fromMeta} from "dirname_deno"
+import { fromMeta } from "dirname_deno"
 
-const {__dirname, __filename} = fromMeta(import.meta)
-
-console.log(__dirname + ">>>>" + __filename)
+const { __dirname, __filename } = fromMeta(import.meta)
 
 const PREV_DIR = ".."
 
