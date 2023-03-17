@@ -6,10 +6,13 @@ export default class Spider {
 
     // 获取页面 html 信息，通过 axios 请求
     getHtmlByAxios = async (url: string) => {
-
-        const res = await axios.get(url)
-
-        return res.data;
+        try {
+            const res = await axios.get(url)
+            return res.data;
+        } catch (error){
+            console.log(`ERROR when request ${url}`)
+        }
+        return ""
     }
 
     // 获取

@@ -15,6 +15,13 @@
     "name": "歷史演義",
     "novels": [
       {
+        "name": "鬼谷四友志",
+        "author": "楊景淐",
+        "dynasty": "清",
+        "url": "https://zh.wikisource.org/wiki/%E9%AC%BC%E8%B0%B7%E5%9B%9B%E5%8F%8B%E5%BF%97",
+        "reserved": false
+      },
+      {
         "name": "三國演義",
         "author": "羅貫中",
         "dynasty": "明",

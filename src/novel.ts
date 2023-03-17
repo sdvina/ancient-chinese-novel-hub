@@ -5,34 +5,66 @@ import Spider from "./spider.ts"
 import * as path from "path"
 import { EOL } from "std/fs"
 import {
-    CatalogItem,
+    Novel,
+    TocItem,
     ChapterItem,
     SectionItem
 } from "./interface.ts"
 
-const getCatalog = (html: string): Promise<Array<CatalogItem>> => {
+const getCategoryArray = (html: string): Promise<Array<Category>> => {
 
     const $ = cheerio.load(html)
 
     return new Promise((resolve, reject) => {
-        const catalogEl = $("div.mw-parser-output > ul > li > a")
-        if (catalogEl) {
-            const catalog = new Array<CatalogItem>()
+        const categoryNames = $("div.mw-parser-output > div:first > ul > li > a")
+        if (categoryNames.length > 0) {
+            const categoryArray = new Array<Category>()
+            categoryNames.each((i, a) => {
+                const categoryEl = $(`div.mw-parser-output > div:gt(${i} + 2) > ul > li > a`)
+                const novelArray = new Array<Novel>()
+                categoryEl.each((j, a2) => {
+                    novelArray.push({
+                        name: $(a2).text().trim(),
+                        author: "",
+                        dynasty: "",
+                        url: constant.WIKISOURCE_URL + $(a2).attr("href"),
+                        reserved: false
+                    })
+                })
+                categoryArray.push({
+                    name: $(a).text(),
+                    novels: novelArray
+                })
+            })
+            resolve(categoryArray)
+        }
+        reject("获取数据失败")
+    })
+}
+
+const getToc = (html: string): Promise<Array<TocItem>> => {
+
+    const $ = cheerio.load(html)
+
+    return new Promise((resolve, reject) => {
+        const tocEl = $("div.mw-parser-output > ul > li > a")
+        if (tocEl.length > 0) {
+            const toc = new Array<TocItem>()
             let no = 1
-            catalogEl.each((_, a) => {
+            tocEl.each((_, a) => {
                 const title = $(a).text().trim()
                 if (title.length > 0) {
-                    catalog.push({
+                    toc.push({
                         no: no.toString(),
                         title: title,
-                        url: constant.WIKISOURCE_URL + $(a).attr('href')
+                        url: constant.WIKISOURCE_URL + $(a).attr("href")
                     })
                     no ++
                 }
             })
-            resolve(catalog)
+            resolve(toc)
         }
-        reject('获取数据失败')
+        reject("获取数据失败")
     })
 }
 
@@ -59,11 +91,11 @@ export const getSection = (html: string): Promise<Array<SectionItem>> => {
             })
             resolve(section)
         }
-        reject('获取数据失败')
+        reject("获取数据失败")
     })
 }
 
-const run = async (fileName: string) => {
+const generateMd = async (fileName: string) => {
 
     const spider = new Spider()
     const categoryArray = await helper.readNovelJsonFile(constant.NOVEL_SRC_DIR, fileName)
@@ -72,19 +104,19 @@ const run = async (fileName: string) => {
         helper.makeDir(constant.NOVEL_DIR, category.name, true)
         const categoryDir = path.join(constant.NOVEL_DIR, category.name)
         category.novels.filter(novel => novel.reserved == false).forEach(async novel => {
-            const catalog = await spider.getHtmlContent(novel.url, getCatalog)
+            const toc = await spider.getHtmlContent(novel.url, getToc)
             const chapter = new Array<ChapterItem>()
             const filePath = novel.name + constant.MD_SUFFIX
             helper.deleteFile(categoryDir, filePath)
-            for (const catalogItem of catalog) {
-                const i = catalog.indexOf(catalogItem);
-                const section = await spider.getHtmlContent(catalogItem.url, getSection)
+            for (const tocItem of toc) {
+                const i = toc.indexOf(tocItem);
+                const section = await spider.getHtmlContent(tocItem.url, getSection)
                 chapter.push({
                     no: i.toString(),
-                    title: catalogItem.title,
+                    title: tocItem.title,
                     section: section
                 })
-                let chapterContent = constant.MD_TITLE_SECONDARY + catalogItem.title + EOL.LF + EOL.LF
+                let chapterContent = constant.MD_TITLE_SECONDARY + tocItem.title + EOL.LF + EOL.LF
                 section.forEach(sectionItem => {
                     chapterContent = chapterContent + sectionItem.content + EOL.LF + EOL.LF
                 })
@@ -94,4 +126,17 @@ const run = async (fileName: string) => {
     })
 }
 
-await run("wikisource.json")
+const generateWikisourceJson = () => {
+    const spider = new Spider()
+    spider.getHtmlContent("https://zh.wikisource.org/wiki/Portal:%E5%B0%8F%E8%AF%B4",
+        getCategoryArray).then(categoryArray => {
+            console.log(categoryArray)
+            helper.writeTextFile(constant.NOVEL_SRC_DIR, "test.json", JSON.stringify(categoryArray, null, 2))
+    })
+}
+
+
+// await generateMd("wikisource.json")
+await generateMd("test.json")
+
+// generateWikisourceJson()

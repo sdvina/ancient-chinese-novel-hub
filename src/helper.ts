@@ -52,7 +52,13 @@ export const readTextFile = (baseDir: string, filePath: string): Promise<string>
 export const deleteFile = (baseDir: string, filePath: string) => {
 
     const filePathResolved = path.resolve(baseDir, filePath)
-    Deno.removeSync(filePathResolved)
+    try {
+        Deno.removeSync(filePathResolved)
+    } catch (error) {
+        if (!(error instanceof Deno.errors.NotFound)) {
+            throw error;
+        }
+    }
 }
 
 export const copyFile = async (
@@ -63,9 +69,9 @@ export const copyFile = async (
     reserve?: boolean
 ) => {
 
-        const srcPath = path.resolve(baseSrcDir, srcFile)
-        const destPath = path.resolve(baseDestDir, destFile)
-        await copy(srcPath, destPath, {overwrite: reserve});
+    const srcPath = path.resolve(baseSrcDir, srcFile)
+    const destPath = path.resolve(baseDestDir, destFile)
+    await copy(srcPath, destPath, {overwrite: reserve})
 }
 
 export const copyDir = async (

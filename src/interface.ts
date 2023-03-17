@@ -5,12 +5,12 @@ export interface Novel {
     author: string
     dynasty: string
     url: string
-    catalog?: Array<CatalogItem>
+    toc?: Array<TocItem>
     chapter?: Array<ChapterItem>
     reserved: boolean
 }
 
-export interface CatalogItem {
+export interface TocItem {
     no: string
     title: string
     url: string
