@@ -1,5 +1,9 @@
 export type GetSpecifyData = (html: string) => Promise<any>
 
+export interface Category {
+    name: string
+    novels: Array<Novel>
+}
 export interface Novel {
     name: string
     author: string

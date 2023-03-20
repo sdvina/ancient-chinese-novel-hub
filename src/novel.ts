@@ -5,6 +5,7 @@ import Spider from "./spider.ts"
 import * as path from "path"
 import { EOL } from "std/fs"
 import {
+    Category,
     Novel,
     TocItem,
     ChapterItem,
@@ -129,9 +130,9 @@ const generateMd = async (fileName: string) => {
 const generateWikisourceJson = () => {
     const spider = new Spider()
     spider.getHtmlContent("https://zh.wikisource.org/wiki/Portal:%E5%B0%8F%E8%AF%B4",
-        getCategoryArray).then(categoryArray => {
-            console.log(categoryArray)
-            helper.writeTextFile(constant.NOVEL_SRC_DIR, "test.json", JSON.stringify(categoryArray, null, 2))
+        getCategoryArray).then(async categoryArray => {
+        console.log(categoryArray)
+        await helper.writeTextFile(constant.NOVEL_SRC_DIR, "test.json", JSON.stringify(categoryArray, null, 2))
     })
 }
 
