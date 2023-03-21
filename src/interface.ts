@@ -12,6 +12,7 @@ export interface Novel {
     toc?: Array<TocItem>
     chapter?: Array<ChapterItem>
     reserved: boolean
+    introduction?: string
 }
 
 export interface TocItem {

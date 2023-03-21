@@ -21,25 +21,25 @@ const getCategoryArray = (html: string): Promise<Array<Category>> => {
         if (categoryNames.length > 0) {
             const categoryArray = new Array<Category>()
             categoryNames.each((i, a) => {
-                const categoryEl = $(`div.mw-parser-output > div:gt(${i} + 2) > ul > li > a`)
+                const categoryEl = $(`div.mw-parser-output > div:eq(${i + 1}) > ul > li > a`)
                 const novelArray = new Array<Novel>()
-                categoryEl.each((j, a2) => {
+                categoryEl.each((_, a2) => {
                     novelArray.push({
                         name: $(a2).text().trim(),
                         author: "",
                         dynasty: "",
                         url: constant.WIKISOURCE_URL + $(a2).attr("href"),
-                        reserved: false
+                        reserved: true
                     })
                 })
                 categoryArray.push({
-                    name: $(a).text(),
+                    name: $(a).text().trim(),
                     novels: novelArray
                 })
             })
             resolve(categoryArray)
         }
-        reject("获取数据失败")
+        reject("Failure getting category array")
     })
 }
 
@@ -49,7 +49,7 @@ const getToc = (html: string): Promise<Array<TocItem>> => {
 
     return new Promise((resolve, reject) => {
         const tocEl = $("div.mw-parser-output > ul > li > a")
-        if (tocEl.length > 0) {
+        if (tocEl) {
             const toc = new Array<TocItem>()
             let no = 1
             tocEl.each((_, a) => {
@@ -65,7 +65,7 @@ const getToc = (html: string): Promise<Array<TocItem>> => {
             })
             resolve(toc)
         }
-        reject("获取数据失败")
+        reject("Failure getting toc")
     })
 }
 
@@ -74,11 +74,12 @@ export const getSection = (html: string): Promise<Array<SectionItem>> => {
     const $ = cheerio.load(html)
 
     return new Promise((resolve, reject) => {
-        let sectionEl = $("div.mw-parser-output > p")
+        let sectionEl = $("div.mw-parser-output > h2, p")
         const sectionEl2 = $("div.prose > p")
         if(sectionEl.length == 0) sectionEl = sectionEl2
-        if (sectionEl.length > 0) {
+        if (sectionEl) {
             const section = new Array<SectionItem>()
+            if($(p))
             let no = 1
             sectionEl.each((_, p) => {
                 const content = $(p).text().trim()
@@ -92,7 +93,7 @@ export const getSection = (html: string): Promise<Array<SectionItem>> => {
             })
             resolve(section)
         }
-        reject("获取数据失败")
+        reject("Failure getting section" + html)
     })
 }
 
@@ -127,17 +128,16 @@ const generateMd = async (fileName: string) => {
     })
 }
 
-const generateWikisourceJson = () => {
+const generateWikisourceJson = (filePath: string) => {
     const spider = new Spider()
     spider.getHtmlContent("https://zh.wikisource.org/wiki/Portal:%E5%B0%8F%E8%AF%B4",
         getCategoryArray).then(async categoryArray => {
         console.log(categoryArray)
-        await helper.writeTextFile(constant.NOVEL_SRC_DIR, "test.json", JSON.stringify(categoryArray, null, 2))
+        await helper.writeTextFile(constant.NOVEL_SRC_DIR, filePath, JSON.stringify(categoryArray, null, 2))
     })
 }
 
 
-// await generateMd("wikisource.json")
-await generateMd("test.json")
+await generateMd("wikisource.json")
 
-// generateWikisourceJson()
+// generateWikisourceJson("wikisource.json")

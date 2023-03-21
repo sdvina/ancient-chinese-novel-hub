@@ -24,3 +24,5 @@ export const MD_SUFFIX = ".md"
 export const MD_TITLE_TOP = "# "
 
 export const MD_TITLE_SECONDARY = "## "
+
+export const MD_TITLE_THIRD = "### "
