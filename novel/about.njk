@@ -1,0 +1,25 @@
+---
+title: Welcome to my page
+layout: layout_novel.njk
+links:
+  - text: My Twitter
+    url: https://twitter.com/sdvina
+  - text: My GitHub profile
+    url: https://github.com/sdvina
+---
+
+<article>
+  <header>
+    <h1>{{ title }}</h1>
+  </header>
+
+  <ul>
+    {% for link in links %}
+    <li>
+      <a href="{{ link.url }}">
+        {{ link.text }}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</article>

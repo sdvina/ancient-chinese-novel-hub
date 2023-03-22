@@ -23,7 +23,6 @@ import tailwindcss from "lume/plugins/tailwindcss.ts";
 const site = lume();
 
 site.ignore(
-    "scaffold",
     "src",
     "README.md",
     "CHANGELOG.md",
@@ -43,7 +42,11 @@ site.use(multilanguage());
 site.use(pagefind());
 site.use(relations());
 site.use(remark());
-site.use(sass());
+site.use(sass({
+    extensions:  [".scss", ".sass"],
+    format: "compressed",
+    includes: ["_includes"]
+}));
 site.use(sitemap());
 site.use(slugify_urls());
 site.use(source_maps());

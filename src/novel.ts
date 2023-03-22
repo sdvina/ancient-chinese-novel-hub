@@ -79,10 +79,9 @@ export const getSection = (html: string): Promise<Array<SectionItem>> => {
         if(sectionEl.length == 0) sectionEl = sectionEl2
         if (sectionEl) {
             const section = new Array<SectionItem>()
-            if($(p))
             let no = 1
             sectionEl.each((_, p) => {
-                const content = $(p).text().trim()
+                const content = $(p).is("h2") ? constant.MD_TITLE_THIRD + $(p).find("span.mw-headline").text().trim() : $(p).text().trim()
                 if (content.length > 0) {
                     section.push({
                         no: no.toString(),
