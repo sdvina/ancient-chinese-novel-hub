@@ -1,6 +1,7 @@
 import lume from "lume/mod.ts";
 import attributes from "lume/plugins/attributes.ts";
 import date from "lume/plugins/date.ts";
+import esbuild from "lume/plugins/esbuild.ts";
 import filter_pages from "lume/plugins/filter_pages.ts";
 import imagick from "lume/plugins/imagick.ts";
 import inline from "lume/plugins/inline.ts";
@@ -20,17 +21,30 @@ import source_maps from "lume/plugins/source_maps.ts";
 import svgo from "lume/plugins/svgo.ts";
 import tailwindcss from "lume/plugins/tailwindcss.ts";
 
-const site = lume();
+const site = lume({
+    src: "./src",
+    emptyDest: true
+}); // dest default _site  location: new URL("https://example.com")
 
 site.ignore(
-    "src",
-    "README.md",
-    "CHANGELOG.md",
-    "node_modules"
+    "./_fetcher"
 );
 
 site.use(attributes());
 site.use(date());
+site.use(esbuild({
+    extensions: [".ts", ".js"],
+    options: {
+        plugins: [],
+        bundle: true,
+        format: "esm",
+        minify: true,
+        keepNames: true,
+        platform: "browser",
+        target: "esnext",
+        treeShaking: true
+    }
+}));
 site.use(filter_pages());
 site.use(imagick());
 site.use(inline());
@@ -42,11 +56,7 @@ site.use(multilanguage());
 site.use(pagefind());
 site.use(relations());
 site.use(remark());
-site.use(sass({
-    extensions:  [".scss", ".sass"],
-    format: "compressed",
-    includes: ["_includes"]
-}));
+site.use(sass());
 site.use(sitemap());
 site.use(slugify_urls());
 site.use(source_maps());

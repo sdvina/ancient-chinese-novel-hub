@@ -1,6 +1,6 @@
 {
   "imports": {
-    "lume/": "https://deno.land/x/lume@v1.15.3/",
+    "lume/": "https://deno.land/x/lume@v1.16.0/",
     "markdown-it": "https://esm.sh/markdown-it@13.0.1",
     "redaxios": "https://deno.land/x/redaxios@0.5.1/mod.ts",
     "axios": "https://esm.sh/axios@1.3.4",

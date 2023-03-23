@@ -9,14 +9,6 @@ export const NOVEL_DIR = path.join(__dirname, PREV_DIR, "novel")
 
 export const NOVEL_SRC_DIR = path.join(__dirname, "novel")
 
-export const HTML_DIR = path.join(__dirname, PREV_DIR, "public", "built")
-
-export const SCAFFOLD_INDEX = path.resolve(__dirname, PREV_DIR, "scaffold/index.html")
-
-export const SCAFFOLD_CATALOG = path.resolve(__dirname, PREV_DIR, "scaffold/catalog.html")
-
-export const SCAFFOLD_CHAPTER = path.resolve(__dirname, PREV_DIR, "scaffold/chapter.html")
-
 export const WIKISOURCE_URL = "https://zh.wikisource.org"
 
 export const MD_SUFFIX = ".md"
