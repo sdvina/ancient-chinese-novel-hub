@@ -20,6 +20,7 @@ import slugify_urls from "lume/plugins/slugify_urls.ts";
 import source_maps from "lume/plugins/source_maps.ts";
 import svgo from "lume/plugins/svgo.ts";
 import tailwindcss from "lume/plugins/tailwindcss.ts";
+import remarkToc from "https://esm.sh/remark-toc@8";
 
 const site = lume({
     src: "./src",
@@ -27,7 +28,13 @@ const site = lume({
 }); // dest default _site  location: new URL("https://example.com")
 
 site.ignore(
-    "./_fetcher"
+    "./_fetcher",
+    "./scripts",
+    "./static"
+);
+
+site.copy(
+    "./static"
 );
 
 site.use(attributes());
@@ -55,7 +62,9 @@ site.use(modify_urls());
 site.use(multilanguage());
 site.use(pagefind());
 site.use(relations());
-site.use(remark());
+site.use(remark({
+    remarkPlugins: [remarkToc]
+}));
 site.use(sass());
 site.use(sitemap());
 site.use(slugify_urls());

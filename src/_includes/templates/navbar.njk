@@ -1,0 +1,14 @@
+<nav class="navbar-container">
+  <div class="navbar">
+    <a href="/" class="navbar-logo" aria-label="Return home">
+      <span>Home</span>
+    </a>
+    <ul class="navbar-menu">
+      <li>
+        <a href="/novels/" {% if main_menu == "novel" %}class="is-selected"{% endif %}>
+          Novels
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
