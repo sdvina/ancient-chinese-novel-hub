@@ -14,5 +14,10 @@
     {{ content | safe }}
 </div>
 {% include "templates/footer.njk" %}
+<script src="//unpkg.com/heti/umd/heti-addon.min.js"></script>
+<script>
+    const heti = new Heti('.heti');
+    heti.autoSpacing();
+</script>
 </body>
 </html>

@@ -17,12 +17,8 @@ layout: ./base.njk
       {{ content | safe }}
     </article>
   </main>
+  <span id="popup" style="display:none; position:absolute; background-color:white; border:1px solid black;"></span>
   <aside class="panel">
-    <ul class="panel-list panel-list--gray">
-      <li><input type="radio" class="J_fontStack" value="heti--classic" name="font" id="font-classic" checked><label for="font-classic">传统</label></li>
-      <li><input type="radio" class="J_fontStack" value="heti--sans" name="font" id="font-sans"><label for="font-sans">黑体</label></li>
-      <li><input type="radio" class="J_fontStack" value="heti--serif" name="font" id="font-serif"><label for="font-serif">宋体</label></li>
-    </ul>
     <ul class="panel-list panel-list--gray">
       <li><input type="radio" class="J_radioGrid" value="" name="grid" id="grid-disable" checked><label for="grid-disable">网格：关</label></li>
       <li><input type="radio" class="J_radioGrid" value="grid-24" name="grid" id="grid-24"><label for="grid-24">大</label></li>
@@ -34,11 +30,44 @@ layout: ./base.njk
       <li><input type="radio" class="J_darkMode" value="dark" name="darkmode" id="darkmode-dark"><label for="darkmode-dark">🌙</label></li>
     </ul>
   </aside>
-  <script src="/heti-addon.js"></script>
   <script>
     const $$root = document.getElementsByTagName('html')[0]
     const $$main = document.getElementsByTagName('main')[0]
     const $$article = document.getElementsByTagName('article')[0]
+    const $$aside = document.querySelector('aside')
+
+    setTimeout(function(){
+      $$aside.style.display = 'none'
+    }, 3000)
+
+    document.addEventListener('click', function(){
+      $$aside.style.display = 'block'
+      setTimeout(function(){
+        $$aside.style.display = 'none'
+      }, 3000)
+    })
+
+    document.addEventListener('mouseup', function(e) {
+      const selection = window.getSelection().toString()
+      if(selection) {
+        const xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status == 200) {
+            const response = xhr.responseText
+            const popup = document.getElementById("popup")
+            popup.innerHTML = "解释：" + response
+            popup.style.display = "block"
+            popup.style.top = e.pageY + 10 + "px"
+            popup.style.left = e.pageX + 10 + "px"
+          }
+        }
+        xhr.open('GET', 'https://www.moedict.tw/a/' + selection + '.json')
+        xhr.send()
+      } else {
+        document.getElementById("popup").style.display = "none"
+      }
+    })
+
 
     function addEventListeners(nodeList, event, fn) {
       [].forEach.call(nodeList, function(elm) {
@@ -46,16 +75,27 @@ layout: ./base.njk
       }, false)
     }
 
+    function restoreOption(itemName, className, elm) {
+      const storedValue = localStorage.getItem(itemName)
+      if (storedValue) {
+        for (let element of document.getElementsByClassName(className)) {
+          element.checked = (storedValue === element.value) ? true : false
+        }
+        elm.setAttribute(itemName, storedValue)
+      }
+    }
+
+    restoreOption('data-darkmode', 'J_darkMode', $$root)
+    restoreOption('data-bg-grid', 'J_radioGrid', $$main)
+
     addEventListeners(document.getElementsByClassName('J_darkMode'), 'change', function (e) {
       $$root.setAttribute('data-darkmode', e.target.value)
+      localStorage.setItem('data-darkmode', e.target.value)
     })
 
     addEventListeners(document.getElementsByClassName('J_radioGrid'), 'change', function (e) {
       $$main.setAttribute('data-bg-grid', e.target.value)
-    })
-
-    addEventListeners(document.getElementsByClassName('J_fontStack'), 'change', function (e) {
-      $$article.className = ['article', 'heti', e.target.value].join(' ')
+      localStorage.setItem('data-bg-grid', e.target.value)
     })
 
     const heti = new Heti('.article')
