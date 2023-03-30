@@ -1,0 +1,20 @@
+.floating-button {
+  position: fixed;
+  top: 20px; /* 调整您希望的位置 */
+  right: 20px; /* 调整您希望的位置 */
+  z-index: 9999; /* 确保在其他元素上方 */
+}
+
+.floating-button aside {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding: 10px;
+  background-color: #fff; /* 调整您希望的背景颜色 */
+  box-shadow: 0 0 5px rgba(0,0,0,.2); /* 调整您希望的阴影效果 */
+}
+
+.floating-button.active aside {
+  display: block;
+}
