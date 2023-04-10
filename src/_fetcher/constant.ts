@@ -5,7 +5,7 @@ const { __dirname, __filename } = fromMeta(import.meta)
 
 const PREV_DIR = ".."
 
-export const NOVEL_DIR = path.join(__dirname, PREV_DIR, "novel")
+export const NOVEL_DIR = path.join(__dirname, PREV_DIR, "novels")
 
 export const NOVEL_SRC_DIR = path.join(__dirname, "novel")
 

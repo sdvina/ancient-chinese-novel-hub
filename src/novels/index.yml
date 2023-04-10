@@ -1,0 +1,4 @@
+layout: layouts/novels.njk
+title: novels
+main_menu: novels
+description:

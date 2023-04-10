@@ -28,10 +28,10 @@ export default class NovelFilter extends HTMLElement {
         if (btn) {
           btn.classList.toggle("is-active", input.checked)
         }
-      });
+      })
 
       const data = new FormData(form)
-      filter(data);
+      filter(data)
       const permalink = new URLSearchParams(data).toString()
 
       if (permalink !== document.location.search) {
@@ -47,7 +47,7 @@ export default class NovelFilter extends HTMLElement {
       for (const [name, value] of data.entries()) {
         if (name === "status") {
           status = value
-          continue;
+          continue
         }
 
         tags.push(name)
@@ -60,7 +60,7 @@ export default class NovelFilter extends HTMLElement {
               item.hidden = true
               return
             }
-            break;
+            break
           case "disabled":
             if (item.classList.contains("is-enabled")) {
               item.hidden = true
@@ -70,7 +70,7 @@ export default class NovelFilter extends HTMLElement {
         }
 
         item.hidden = tags.length &&
-          tags.every((tag) => !item.dataset.tags.split(",").includes(tag));
+          tags.every((tag) => !item.dataset.tags.split(",").includes(tag))
       })
     }
   }
