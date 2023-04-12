@@ -70,25 +70,7 @@ site.use(sitemap());
 site.use(slugify_urls());
 site.use(source_maps());
 site.use(svgo());
-site.use(tailwindcss({
-    // Extract the classes from HTML and JSX files
-    extensions: [".html", ".jsx"],
-
-    // Your Tailwind options, like the theme colors and fonts
-    options: {
-        theme: {
-            colors: {
-                blue: "#1fb6ff",
-                purple: "#7e5bef",
-                pink: "#ff49db",
-            },
-            fontFamily: {
-                sans: ["Graphik", "sans-serif"],
-                serif: ["Merriweather", "serif"],
-            },
-        },
-    },
-}));
+site.use(tailwindcss());
 site.use(postcss());
 
 export default site;

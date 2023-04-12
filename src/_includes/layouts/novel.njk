@@ -1,19 +1,18 @@
 ---
 layout: ./base.njk
 ---
-
 <div id="novel">
+  <link rel="stylesheet" href="//unpkg.com/heti/umd/heti.min.css">
+  <link rel="stylesheet" href="/styles/index.css">
   <header class="novel-header">
     <h1>
-      {{ title }}
+      {{ title | safe }}
     </h1>
     {{ description | md | safe }}
 
     {% include "templates/toc.njk" %}
   </header>
-  <link rel="stylesheet" href="//unpkg.com/heti/umd/heti.min.css">
-  <link rel="stylesheet" href="/styles/index.css">
-  <main class="container">
+  <main class="container" data-darkmode="auto">
     <article class="article heti heti--ancient">
       {{ content | safe }}
     </article>

@@ -9,7 +9,7 @@ layout: ./base.njk
   </header>
 
   <novel-filter>
-    <form class="plugins-filter">
+    <form class="novels-filter">
       <select name="status" class="selector">
         <option value="all">All novels {{ all_total }}</option>
         <option value="enabled">Enabled by default</option>
@@ -23,18 +23,18 @@ layout: ./base.njk
       {% endfor %}
     </form>
 
-    <ul class="plugins-list">
+    <ul class="novels-list">
       {% for page in search.pages("url^=/novels/ url!=/novels/", "title") %}
-      <li class="plugin {% if page.data.enabled %} is-enabled{% endif %}" data-tags="{{ page.data.tags }}">
-        <a href="{{ page.data.url }}" class="plugin-info">
-          <strong class="plugin-name">
+      <li class="novel {% if page.data.enabled %} is-enabled{% endif %}" data-tags="{{ page.data.tags }}">
+        <a href="{{ page.data.url }}" class="novel-info">
+          <strong class="novel-name">
             {{ page.data.title }}
           </strong>
 
           {{ page.data.description | md | safe }}
         </a>
 
-        <nav class="plugin-tags">
+        <nav class="novel-tags">
           {% for tag in page.data.tags %}
           <a href="?{{ tag }}=on" class="button is-secondary is-small is-color-{{ tags_info[tag].color }}">
             {{ tags_info[tag].name }}
