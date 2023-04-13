@@ -8,18 +8,200 @@ links:
     url: https://github.com/sdvina
 ---
 
-<article>
-  <header>
-    <h1>{{ title }}</h1>
-  </header>
+要实现带分页的卡片列表和筛选功能，可以使用 Bootstrap 的组件和一些 JavaScript 代码。以下是一种可能的实现方式：
 
-  <ul>
-    {% for link in links %}
-    <li>
-      <a href="{{ link.url }}">
-        {{ link.text }}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</article>
+1. 在 HTML 中创建一个包含卡片列表和分页组件的容器，如下所示：
+
+```
+<div class="card-list">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Card 1</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Author 1</h6>
+      <p class="card-text">Some text for Card 1.</p>
+      <p class="card-tags">Tag 1, Tag 2</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Card 2</h5>
+      <h6 class="card-subtitle mb-2 text-muted">Author 2</h6>
+      <p class="card-text">Some text for Card 2.</p>
+      <p class="card-tags">Tag 2, Tag 3</p>
+    </div>
+  </div>
+  <!-- more cards... -->
+
+  <nav>
+    <ul class="pagination">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+      </li>
+      <li class="page-item active" aria-current="page">
+        <a class="page-link" href="#">1</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">2</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">3</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+```
+
+2. 在 HTML 中创建一个包含筛选条件的表单，如下所示：
+
+```
+<form>
+  <div class="form-group">
+    <label for="name-filter">Name:</label>
+    <input type="text" class="form-control" id="name-filter">
+  </div>
+  <div class="form-group">
+    <label for="author-filter">Author:</label>
+    <input type="text" class="form-control" id="author-filter">
+  </div>
+  <div class="form-group">
+    <label for="tag-filter">Tag:</label>
+    <input type="text" class="form-control" id="tag-filter">
+  </div>
+  <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+```
+
+3. 使用 JavaScript 监听表单提交事件，并根据筛选条件和当前分页来过滤卡片列表，并更新分页组件，如下所示：
+
+```
+<script>
+  $(document).ready(function() {
+    var cardsPerPage = 10;
+    var currentPage = 1;
+
+    function filterCards() {
+      var nameFilter = $('#name-filter').val().toLowerCase();
+      var authorFilter = $('#author-filter').val().toLowerCase();
+      var tagFilter = $('#tag-filter').val().toLowerCase();
+
+      $('.card').each(function(index) {
+        var name = $(this).find('.card-title').text().toLowerCase();
+        var author = $(this).find('.card-subtitle').text().toLowerCase();
+        var tags = $(this).find('.card-tags').text().toLowerCase();
+
+        if (name.indexOf(nameFilter) === -1 ||
+                author.indexOf(authorFilter) === -1 ||
+                tags.indexOf(tagFilter) === -1) {
+          $(this).hide();
+        } else {
+          $(this).show();
+        }
+
+        if (index >= (currentPage - 1) * cardsPerPage && index < currentPage * cardsPerPage) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+
+      updatePagination();
+    }
+
+    function updatePagination() {
+      var numCards = $('.card:visible').length;
+      var numPages = Math.ceil(numCards / cardsPerPage);
+
+      $('.pagination li').remove();
+
+      if (numPages <= 1) {
+        return;
+      }
+
+      var prevPage = $('<li class="page-item"><a class="page-link" href="#" tabindex="-1">Previous</a></li>');
+      if (currentPage === 1) {
+        prevPage.addClass('disabled');
+      } else {
+        prevPage.click(function() {
+          currentPage--;
+          filterCards();
+        });
+      }
+
+      $('.pagination').append(prevPage);
+
+      for (var i = 1; i <= numPages; i++) {
+        var pageLink = $('<a class="page-link" href="#">' + i + '</a>');
+        var pageItem = $('<li class="page-item"></li>');
+        if (i === currentPage) {
+          pageItem.addClass('active');
+        } else {
+          pageLink.click((function(page) {
+            return function() {
+              currentPage = page;
+              filterCards();
+            };
+          })(i));
+        }
+        pageItem.append(pageLink);
+        $('.pagination').append(pageItem);
+      }
+
+      var nextPage = $('<li class="page-item"><a class="page-link" href="#">Next</a></li>');
+      if (currentPage === numPages) {
+        nextPage.addClass('disabled');
+      } else {
+        nextPage.click(function() {
+          currentPage++;
+          filterCards();
+        });
+      }
+
+      $('.pagination').append(nextPage);
+    }
+
+    $('form').submit(function(event) {
+      event.preventDefault();
+      currentPage = 1;
+      filterCards();
+    });
+
+    filterCards();
+  });
+</script>
+```
+
+4. 在 CSS 中为卡片列表和分页组件添加样式，如下所示：
+
+```
+.card-list {
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+}
+
+.card {
+width: 48%;
+margin-bottom: 20px;
+}
+
+.card-title {
+margin-top: 0;
+}
+
+.card-subtitle {
+margin-bottom: 10px;
+}
+
+.card-tags {
+font-style: italic;
+}
+
+.pagination {
+margin-top: 20px;
+}
+```
+
+这样就可以实现一个带分页的卡片列表和筛选功能了。用户可以在表单中输入筛选条件，点击 Filter 按钮进行筛选，同时可以使用分页组件切换页码。
