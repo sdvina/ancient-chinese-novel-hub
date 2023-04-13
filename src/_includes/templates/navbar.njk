@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="check2" viewBox="0 0 16 16">
+    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+  </symbol>
   <symbol id="circle-half" viewBox="0 0 16 16">
     <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
   </symbol>
@@ -42,25 +45,33 @@
                   data-bs-toggle="dropdown"
                   data-bs-display="static">
             <svg class="bi my-1 me-2 theme-icon-active"><use href="#circle-half"></use></svg>
+            Toggle theme
           </button>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme" style="--bs-dropdown-min-width: 8rem;">
             <li>
               <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light">
                 <svg class="bi me-2 opacity-50 theme-icon"><use href="#sun-fill"></use></svg>
+                Light
+                <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
               </button>
             </li>
             <li>
               <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark">
                 <svg class="bi me-2 opacity-50 theme-icon"><use href="#moon-stars-fill"></use></svg>
+                Dark
+                <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
               </button>
             </li>
             <li>
               <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto">
                 <svg class="bi me-2 opacity-50 theme-icon"><use href="#circle-half"></use></svg>
+                Auto
+                <svg class="bi ms-auto d-none"><use href="#check2"></use></svg>
               </button>
             </li>
           </ul>
         </div>
+        <a href="https://github.com/sdvina/ancient-chinese-novel-hub" target="_blank" rel="noopener" class="text-decoration-none">View on GitHub</a>
       </div>
     </div>
   </div>
