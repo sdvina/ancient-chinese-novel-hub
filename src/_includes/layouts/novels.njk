@@ -2,48 +2,29 @@
 layout: ./base.njk
 ---
 
-<main class="novels">
-  <header class="novels-header">
-    <h1>{{ title }}</h1>
-    {{ description | md | safe }}
-  </header>
-
-  <novel-filter>
-    <form class="novels-filter">
-      <select name="status" class="selector">
-        <option value="all">All novels {{ all_total }}</option>
-        <option value="enabled">Enabled by default</option>
-        <option value="disabled">Disabled by default</option>
-      </select>
-
-      {% for id, info in tags_info %}
-      <label class="button is-secondary is-color-{{ info.color }}">
-        <input type="checkbox" name="{{ id }}"> {{ info.name }}
-      </label>
-      {% endfor %}
-    </form>
-
-    <ul class="novels-list">
+<main>
+  <div class="container">
+    <div class="row text-center">
       {% for page in search.pages("url^=/novels/ url!=/novels/", "title") %}
-      <li class="novel {% if page.data.enabled %} is-enabled{% endif %}" data-tags="{{ page.data.tags }}">
-        <a href="{{ page.data.url }}" class="novel-info">
-          <strong class="novel-name">
-            {{ page.data.title }}
-          </strong>
-
-          {{ page.data.description | md | safe }}
-        </a>
-
-        <nav class="novel-tags">
-          {% for tag in page.data.tags %}
-          <a href="?{{ tag }}=on" class="button is-secondary is-small is-color-{{ tags_info[tag].color }}">
-            {{ tags_info[tag].name }}
-          </a>
-          {% endfor %}
-        </nav>
-      </li>
+        <div class="col-lg-3 col-md-4 col-sm-6 themed-grid-col">
+          <!-- 示例卡片 -->
+          <div class="card m-4">
+            <a href="{{ page.data.url }}" class="novel-info">
+              <img src="https://s.cn.bing.net/th?id=OHR.RedSeaStars_ZH-CN6243743747_1920x1080.jpg&rf=LaDigue_1920x1080.jpg&qlt=50" class="card-img-top" alt="图片描述">
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">
+                <strong class="novel-name">
+                  {{ page.data.title }}
+                </strong>
+                </h5>
+                <p class="card-text">作者</p>
+                <p class="card-text"><small class="text-muted">标签</small></p>
+                  {{ page.data.description | md | safe }}
+              </div>
+            </div>
+        </div>
       {% endfor %}
-    </ul>
-  </novel-filter>
-
+    </div>
+  </div>
 </main>
