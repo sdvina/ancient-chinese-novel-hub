@@ -18,9 +18,14 @@ layout: ./base.njk
                   {{ page.data.title }}
                 </strong>
                 </h5>
-                <p class="card-text">作者</p>
-                <p class="card-text"><small class="text-muted">标签</small></p>
-                  {{ page.data.description | md | safe }}
+                <p class="card-text">
+                  {{ page.data.author }} {{ page.data.dynasty }}
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">
+                    {{ page.data.tag }}
+                  </small>
+                </p>
               </div>
             </div>
         </div>
