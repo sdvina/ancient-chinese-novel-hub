@@ -18,3 +18,15 @@ sidebar.addEventListeners(document.getElementsByClassName("J_radioGrid"), "chang
     $$main.setAttribute("data-bg-grid", e.target.value)
     localStorage.setItem("data-bg-grid", e.target.value)
 })
+
+document.querySelector('.navbar').classList.add('fixed-top')
+let prevScrollpos = window.pageYOffset
+window.onscroll = function() {
+    let currentScrollPos = window.pageYOffset
+    if (prevScrollpos > currentScrollPos) {
+        document.querySelector('.navbar').classList.remove('hide')
+    } else {
+        document.querySelector('.navbar').classList.add('hide')
+    }
+    prevScrollpos = currentScrollPos
+}
