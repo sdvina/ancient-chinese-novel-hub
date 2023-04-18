@@ -13,19 +13,22 @@ import multilanguage from "lume/plugins/multilanguage.ts";
 import pagefind from "lume/plugins/pagefind.ts";
 import postcss from "lume/plugins/postcss.ts";
 import relations from "lume/plugins/relations.ts";
-import remark from "lume/plugins/remark.ts";
 import sass from "lume/plugins/sass.ts";
 import sitemap from "lume/plugins/sitemap.ts";
 import slugify_urls from "lume/plugins/slugify_urls.ts";
 import source_maps from "lume/plugins/source_maps.ts";
 import svgo from "lume/plugins/svgo.ts";
-import tailwindcss from "lume/plugins/tailwindcss.ts";
-import remarkToc from "https://esm.sh/remark-toc@8";
+import toc from "https://deno.land/x/lume_markdown_plugins@v0.1.0/toc/mod.ts";
+
+const markdown = {
+    plugins: [toc],
+    keepDefaultPlugins: true,
+};
 
 const site = lume({
     src: "./src",
     emptyDest: true
-}); // dest default _site  location: new URL("https://example.com")
+}, { markdown }); // dest default _site  location: new URL("https://example.com")
 
 site.ignore(
     "./_fetcher",
@@ -62,15 +65,11 @@ site.use(modify_urls());
 site.use(multilanguage());
 site.use(pagefind());
 site.use(relations());
-site.use(remark({
-    remarkPlugins: [remarkToc]
-}));
 site.use(sass());
 site.use(sitemap());
 site.use(slugify_urls());
 site.use(source_maps());
 site.use(svgo());
-site.use(tailwindcss());
 site.use(postcss());
 
 export default site;

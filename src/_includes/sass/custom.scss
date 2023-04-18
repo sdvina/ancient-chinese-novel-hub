@@ -94,3 +94,11 @@ body {
     }
   }
 }
+
+.navbar {
+  transition: top 0.3s;
+}
+
+.navbar.hide {
+  top: -56px;
+}

@@ -441,6 +441,9 @@
     "https://deno.land/x/lume@v1.16.2/plugins/tailwindcss.ts": "6542757ed1778cdc7a76a47d2f986d8fcedb1c00a9fb704e383ad263ccb20cbc",
     "https://deno.land/x/lume@v1.16.2/plugins/url.ts": "43d3d47896a7322a8dd34572dedb4baa6f73a382594a2ff7c34a3a064dcc6c9e",
     "https://deno.land/x/lume@v1.16.2/plugins/yaml.ts": "df24aac4098dba258f1ac331a3b16ba488a336eb63c51afed8f59201228d583c",
+    "https://deno.land/x/lume_markdown_plugins@v0.1.0/toc/anchors.ts": "f41ccb00f0890717fc2dbb4d368dfe9d652da82bb18d6cbe6c83d399b6b1d21c",
+    "https://deno.land/x/lume_markdown_plugins@v0.1.0/toc/mod.ts": "453449f504006beb484a1e7599567b51c6fd159a2ed038884df683bd564d78bf",
+    "https://deno.land/x/lume_markdown_plugins@v0.1.0/utils.ts": "6e6c3c394709eff39080562732c2dafe404f225253aaded937133ea694c4b735",
     "https://deno.land/x/nunjucks@3.2.3-2/mod.d.ts": "7ad0a1e485a1890b16591eaa5a7b48fadca831b71b6c5e13c2a4fed279d70190",
     "https://deno.land/x/nunjucks@3.2.3-2/mod.js": "3d7c6c78d98b4d9dedb4317be7898a150854cec270a9faa1ef0a77df549b619a",
     "https://deno.land/x/nunjucks@3.2.3-2/src/compiler.js": "e5c219a22b0b8f660967db1513db86b3d4006d8c71d7de1e3358da7387450b1d",
@@ -513,6 +516,7 @@
       "remark-gfm@3.0.1": "remark-gfm@3.0.1",
       "remark-parse@10.0.1": "remark-parse@10.0.1",
       "remark-rehype@10.1.0": "remark-rehype@10.1.0",
+      "remark-toc@8": "remark-toc@8.0.1",
       "sass@1.60.0": "sass@1.60.0",
       "svgo@3.0.2": "svgo@3.0.2",
       "unidecode@0.1.8": "unidecode@0.1.8",
@@ -595,6 +599,10 @@
         "dependencies": {
           "@types/ms": "@types/ms@0.7.31"
         }
+      },
+      "@types/extend@3.0.1": {
+        "integrity": "sha512-R1g/VyKFFI2HLC1QGAeTtCBWCo6n75l41OnsVYNbmKG+kempOESaodf6BeJyUM3Q0rKa/NQcTHbB2+66lNnxLw==",
+        "dependencies": {}
       },
       "@types/hast@2.3.4": {
         "integrity": "sha512-wLEm0QvaoawEDoTRwzTXp4b4jpwiJDvR5KMnFnVodm3scufTlBOWRD6N1OBf9TZMhjlNsSfcO5V+7AF4+Vy+9g==",
@@ -891,6 +899,10 @@
       },
       "function-bind@1.1.1": {
         "integrity": "sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==",
+        "dependencies": {}
+      },
+      "github-slugger@2.0.0": {
+        "integrity": "sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==",
         "dependencies": {}
       },
       "glob-parent@5.1.2": {
@@ -1215,6 +1227,18 @@
         "integrity": "sha512-V4Zn/ncyN1QNSqSBxTrMOLpjr+IKdHl2v3KVLoWmDPscP4r9GcCi71gjgvUV1SFSKh92AjAG4peFuBl2/YgCJg==",
         "dependencies": {
           "@types/mdast": "@types/mdast@3.0.11"
+        }
+      },
+      "mdast-util-toc@6.1.1": {
+        "integrity": "sha512-Er21728Kow8hehecK2GZtb7Ny3omcoPUVrmObiSUwmoRYVZaXLR751QROEFjR8W/vAQdHMLj49Lz20J55XaNpw==",
+        "dependencies": {
+          "@types/extend": "@types/extend@3.0.1",
+          "@types/mdast": "@types/mdast@3.0.11",
+          "extend": "extend@3.0.2",
+          "github-slugger": "github-slugger@2.0.0",
+          "mdast-util-to-string": "mdast-util-to-string@3.2.0",
+          "unist-util-is": "unist-util-is@5.2.1",
+          "unist-util-visit": "unist-util-visit@4.1.2"
         }
       },
       "mdn-data@2.0.28": {
@@ -1693,6 +1717,14 @@
           "@types/hast": "@types/hast@2.3.4",
           "@types/mdast": "@types/mdast@3.0.11",
           "mdast-util-to-hast": "mdast-util-to-hast@12.3.0",
+          "unified": "unified@10.1.2"
+        }
+      },
+      "remark-toc@8.0.1": {
+        "integrity": "sha512-7he2VOm/cy13zilnOTZcyAoyoolV26ULlon6XyCFU+vG54Z/LWJnwphj/xKIDLOt66QmJUgTyUvLVHi2aAElyg==",
+        "dependencies": {
+          "@types/mdast": "@types/mdast@3.0.11",
+          "mdast-util-toc": "mdast-util-toc@6.1.1",
           "unified": "unified@10.1.2"
         }
       },

@@ -53,4 +53,18 @@
                 })
             })
     })
+
+    let prevScrollpos = window.pageYOffset;
+    window.onscroll = function() {
+        let currentScrollPos = window.pageYOffset;
+        if (prevScrollpos > currentScrollPos) {
+            document.querySelector('.navbar').classList.remove('hide');
+        } else {
+            document.querySelector('.navbar').classList.add('hide');
+        }
+        prevScrollpos = currentScrollPos;
+    }
 })()
+
+
+
