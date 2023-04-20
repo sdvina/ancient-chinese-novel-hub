@@ -2,28 +2,24 @@
 layout: ./base.njk
 ---
 
-<div class="d-flex justify-content-center mt-lg-5" id="novel">
-  <div class="row text-center">
-    <div class="col-2">
-      <header class="novel-header">
-        <h1>
-          {{ title | safe }}
-        </h1>
-      </header>
+<div class="mt-auto" id="novel">
+  <link rel="stylesheet" href="//unpkg.com/heti/umd/heti.min.css">
+  <link rel="stylesheet" href="/styles/novel.css">
+  <main class="container" data-darkmode="auto">
+    <article class="article heti heti--ancient">
+      <h1>
+        {{ title | safe }}
+      </h1>
+      <h2>
+        {{ author | safe }} {{ dynasty | safe }}
+      </h2>
+      <p>
+        {{ description | safe }}
+      </p>
       {% include "templates/toc.njk" %}
-    </div>
-    <div class="col-10">
-      <link rel="stylesheet" href="//unpkg.com/heti/umd/heti.min.css">
-      <link rel="stylesheet" href="/styles/novel.css">
-      <main class="container" data-darkmode="auto">
-        <article class="article heti heti--ancient">
-          {{ content | safe }}
-        </article>
-      </main>
-    </div>
-  </div>
-
-
+      {{ content | safe }}
+    </article>
+  </main>
   <div id="tooltip" role="tooltip">
     <div id="arrow" data-popper-arrow></div>
   </div>

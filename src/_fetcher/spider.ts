@@ -1,6 +1,6 @@
 import axios from "redaxios"
-import { GetSpecifyData } from "./interface.ts"
-import { Any } from "encoding"
+import {GetSpecifyData} from "./interface.ts"
+import {Any} from "encoding"
 
 export default class Spider {
 
@@ -20,8 +20,7 @@ export default class Spider {
         console.log(`>>>Request ${url}<<<`)
         const html = await this.getHtmlByAxios(url)
         // 2. 获取对应标签内容信息（可以适当处理输入内容格式）
-        const data = await getSpecifyData(html)
         // 3. 内容写入文件
-        return data
+        return await getSpecifyData(html)
     }
 }

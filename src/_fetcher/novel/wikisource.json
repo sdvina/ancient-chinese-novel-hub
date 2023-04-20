@@ -395,10 +395,10 @@
       },
       {
         "name": "西遊記",
-        "author": "",
+        "author": "吳承恩",
         "dynasty": "",
         "url": "https://zh.wikisource.org/wiki/%E8%A5%BF%E9%81%8A%E8%A8%98",
-        "reserved": true
+        "reserved": false
       },
       {
         "name": "封神演義",
