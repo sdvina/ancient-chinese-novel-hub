@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="/styles/base.css">
 </head>
 <body>
-{% include "templates/navbar.njk" %}
-<div class="mt-auto">
+{#{% include "templates/navbar.njk" %}#}
+{% include "templates/offcanvas.njk" %}
+<div>
     {{ content | safe }}
 </div>
 {% include "templates/footer.njk" %}
