@@ -16,13 +16,13 @@ export const makeDir = (baseDir:string, dir: string, reserve: boolean) => {
 export const writeFile = async (baseDir: string, filePath: string, data: string) => {
 
     const filePathResolved = path.resolve(baseDir, filePath)
-    const encoder = new TextEncoder();
-    const encodedData = encoder.encode(data);
+    const encoder = new TextEncoder()
+    const encodedData = encoder.encode(data)
     try {
         await Deno.writeFile(filePathResolved, encodedData)
-        console.log(`Data written to file ${filePath} successfully.`);
+        console.log(`Data written to file ${filePath} successfully.`)
     } catch (error) {
-        console.error(`Error writing data to file ${filePath}:`, error.message);
+        console.error(`Error writing data to file ${filePath}:`, error.message)
     }
 }
 
@@ -31,9 +31,9 @@ export const writeTextFile = async (baseDir: string, filePath: string, data: str
     const filePathResolved = path.resolve(baseDir, filePath)
     try {
         await Deno.writeTextFile(filePathResolved, data, { append: append })
-        console.log(`Data written to file ${filePath} successfully.`);
+        console.log(`Data written to file ${filePath} successfully.`)
     } catch (error) {
-        console.error(`Error writing data to file ${filePath}:`, error.message);
+        console.error(`Error writing data to file ${filePath}:`, error.message)
     }
 }
 
@@ -55,9 +55,7 @@ export const deleteFile = (baseDir: string, filePath: string) => {
     try {
         Deno.removeSync(filePathResolved)
     } catch (error) {
-        if (!(error instanceof Deno.errors.NotFound)) {
-            throw error;
-        }
+        if (!(error instanceof Deno.errors.NotFound)) throw error
     }
 }
 
